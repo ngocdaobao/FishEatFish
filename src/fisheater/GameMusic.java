@@ -9,7 +9,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class GameMusic {
-    private boolean playing;
+    private boolean playing; 
     private String file = "fisheater/resources/sounds/gameMusic.wav";
     private Clip sound;
     
@@ -25,11 +25,13 @@ public class GameMusic {
 		catch (LineUnavailableException e3) {System.out.println(e3); }
     }
     
+    //Bắt đầu phát nhạc
     public void playSound() {
         sound.start();
         sound.loop(Clip.LOOP_CONTINUOUSLY);
     }
     
+    //Kiểm tra đã phát nhạc chưa
     public boolean isPlaying() {
         return playing;
     }
