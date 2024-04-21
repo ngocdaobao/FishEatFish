@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import javax.swing.ImageIcon;
 
 public abstract class CoreObject 
+{
 	public int x,y, move_x, move_y; // x, y: tọa độ của  object; move_x, move_y: khoảng cách di chuyển của obj
 	public int width, height;       // chiều rộng, chiều cao của object
 	public Image img;
