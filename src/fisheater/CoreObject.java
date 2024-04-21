@@ -101,6 +101,14 @@ public abstract class CoreObject
 		this.visible = c;
 	}
 	
+	public void paint(Graphics g)
+	    {
+	        if(this.visible)
+	        {
+	            g.drawImage(this.img, this.x, this.y, null);
+	        }
+	    }
+	
 	// Check 2 Objs có va chạm không
 	public boolean CheckCollision(CoreObject enemy) {
 		
