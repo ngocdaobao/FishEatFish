@@ -10,7 +10,7 @@ public class PowerUp extends CoreObject
     private long duration; //luu tham so cho thoi gian của PowerUp
 
     private String name = "Speed Up"; //luu ten cua powerup 
-    private String icon = "fisheater/resources/fish/star.png"; //path dan den file luu icon cho object powerup
+    private String icon = "fisheater/resources/fish/lightning.png"; //path dan den file luu icon cho object powerup
 
     private int counter = 0; //theo doi thoi gian con lai cua powerup
 
