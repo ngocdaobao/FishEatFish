@@ -1,6 +1,9 @@
 
 package fisheater;
 
+import music.LoopMusic;
+import music.SoundEffect;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -40,7 +43,7 @@ public class Board extends JPanel implements Runnable
 
     private boolean inGame, inMenu, GameOver, quitGame, printDuration;
     private Font font;
-    private GameMusic gameMusic;
+    private LoopMusic gameMusic  = new LoopMusic("fisheater/resources/sounds/gameMusic.wav");
 
     public Board(int width, int height)
     {
@@ -59,7 +62,6 @@ public class Board extends JPanel implements Runnable
         setDoubleBuffered(true);
         
         font = new Font("Helvetica", Font.BOLD, 24);
-        gameMusic = new GameMusic();
 
         initGame();
     }
@@ -252,6 +254,10 @@ public class Board extends JPanel implements Runnable
         {
             if(inGame)
             {
+            	if(!gameMusic.isPlaying())
+                {
+                    gameMusic.play();
+                }
                 if(pUp.isAlive())
                 {
                     pUp.move();
@@ -320,11 +326,19 @@ public class Board extends JPanel implements Runnable
                     player.move();
                     checkCollisions();
             }
-            
-            if(!gameMusic.isPlaying())
+            else if (inMenu)
             {
-                gameMusic.playSound();
-                gameMusic.setPlaying();
+            	if(gameMusic.isPlaying())
+                {
+                    gameMusic.stop();
+                }
+            }
+            else if (GameOver)
+            {
+            	if(gameMusic.isPlaying())
+                {
+                    gameMusic.stop();
+                }
             }
             
         	repaint();
