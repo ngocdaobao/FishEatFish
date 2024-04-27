@@ -3,8 +3,8 @@ package music;
 import javax.sound.sampled.Clip;
 
 public class LoopMusic extends Music{
-	public LoopMusic(String path) {
-		super(path);
+	public LoopMusic(String path, double v) {
+		super(path, v);
 	}
 
 	public void play() {
