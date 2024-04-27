@@ -43,7 +43,9 @@ public class Board extends JPanel implements Runnable
 
     private boolean inGame, inMenu, GameOver, quitGame, printDuration;
     private Font font;
-    private LoopMusic gameMusic  = new LoopMusic("fisheater/resources/sounds/gameMusic.wav");
+    private LoopMusic gameMusic  = new LoopMusic("fisheater/resources/sounds/gameMusic.wav", 1);
+    //private LoopMusic menuMusic  = new LoopMusic("fisheater/resources/sounds/gameMusic.wav", 1);
+    //private SoundEffect eat = new SoundEffect("fisheater/resources/sounds/gameMusic.wav", 1);
 
     public Board(int width, int height)
     {
@@ -254,10 +256,7 @@ public class Board extends JPanel implements Runnable
         {
             if(inGame)
             {
-            	if(!gameMusic.isPlaying())
-                {
-                    gameMusic.play();
-                }
+            	gameMusic.play();
                 if(pUp.isAlive())
                 {
                     pUp.move();
@@ -328,10 +327,7 @@ public class Board extends JPanel implements Runnable
             }
             else if (inMenu)
             {
-            	if(gameMusic.isPlaying())
-                {
-                    gameMusic.stop();
-                }
+            	gameMusic.stop();
             }
             else if (GameOver)
             {

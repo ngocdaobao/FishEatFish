@@ -2,8 +2,8 @@ package music;
 
 public class SoundEffect extends Music {
 
-	public SoundEffect(String path) {
-		super(path);
+	public SoundEffect(String path, double v) {
+		super(path, v);
 	}
 
 	public void play() {
