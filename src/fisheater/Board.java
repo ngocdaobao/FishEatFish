@@ -37,11 +37,12 @@ public class Board extends JPanel implements Runnable
     private Player player;
     private Background bg;
     private PowerUp pUp;
+    private EatShark SharkEat;
     private MenuSystem menu;
     private ArrayList <Fish> fish;
     private ArrayList <Shark> sharks;
 
-    private boolean inGame, inMenu, GameOver, quitGame, printDuration;
+    private boolean inGame, inMenu, GameOver, quitGame, printDuration, sharkDuration;
     private Font font;
     private LoopMusic gameMusic  = new LoopMusic("fisheater/resources/sounds/gameMusic.wav");
 
@@ -71,6 +72,7 @@ public class Board extends JPanel implements Runnable
         menu   = new MenuSystem(B_WIDTH, B_HEIGHT);
         bg     = new Background(0,0);
         pUp    = new PowerUp (0,0,0);
+        SharkEat = new EatShark (0,0,0);
         fish   = new ArrayList();
         sharks = new ArrayList();
         player = new Player(300,200, 5);
@@ -79,6 +81,7 @@ public class Board extends JPanel implements Runnable
         frameRate = 0;
         score     = 0;
         pUp.setAlive(false);
+        SharkEat.setAlive(false);
     }
 
     @Override
@@ -170,6 +173,19 @@ public class Board extends JPanel implements Runnable
         pUp = new PowerUp(x,y,speed);
     }
 
+
+    
+    public void genEatShark()
+    {
+    	Random gen = new Random();
+    	int x = (SharkEat.getWidth() + gen.nextInt(B_WIDTH - SharkEat.getWidth()*3)),
+    		y = -gen.nextInt(B_HEIGHT) - 500,
+    		speed = gen.nextInt(5)+3;
+    	
+    	SharkEat = new EatShark(x,y,speed);
+    }
+
+    
     @Override
     public void paint(Graphics g)
     {
@@ -213,6 +229,20 @@ public class Board extends JPanel implements Runnable
             {
                 g.drawString(pUp.getName() + " Buff Duration: " + pUp.getDuration()/63 + "s", 10, 30);
             }
+            
+   
+            if (SharkEat.isAlive() && SharkEat.isVisible())
+            {
+            	SharkEat.paint(g);
+            }
+            if(sharkDuration && SharkEat.isAlive())
+            {
+            	g.drawString(SharkEat.getName() + " Buff Duration: " + SharkEat.getDuration()/63 + "s", 10, 20);
+            }
+     
+            
+            
+            
             g.setColor(Color.black);
             g.drawString("Score: " + score, 0, 10);
         }
@@ -261,6 +291,12 @@ public class Board extends JPanel implements Runnable
                 if(pUp.isAlive())
                 {
                     pUp.move();
+                }
+                
+              
+                if (SharkEat.isAlive())
+                {
+                	SharkEat.move();
                 }
                 
                 for(int i = 0; i < fish.size(); i++)
@@ -318,11 +354,20 @@ public class Board extends JPanel implements Runnable
                 if(pUp.getDuration() < 0)
                 {
                     player.setSpeedUp(false);
-                    player.setSharkEat(false);
                     printDuration = false;
                     pUp.setAlive(false);
                 }
 	    		
+                if(SharkEat.isAlive() == false && gen.nextInt(200) >15)
+                {
+                	genEatShark();
+                }
+                if(SharkEat.getDuration() < 0)
+                {
+                	player.setSharkEat(false);
+                	sharkDuration = false;
+                	SharkEat.setAlive(false);
+                }
                     player.move();
                     checkCollisions();
             }
@@ -408,18 +453,18 @@ public class Board extends JPanel implements Runnable
         
         if(player.EllipseCollision(pUp))
         {
-            if(pUp.getName().equals("Speed Up"))
-            {
-                player.setSpeedUp(true);
-            }
-            if(pUp.getName().equals("Shark Eater"))
-            {
-                player.setSharkEat(true);
-            }
-            
+            player.setSpeedUp(true);
             pUp.setVisible(false);
             pUp.setY(-10);
             printDuration = true;
+        }
+        
+        if (player.EllipseCollision(SharkEat))
+        {
+        	player.setSharkEat(true);
+        	SharkEat.setVisible(false);
+        	SharkEat.setY(-10);
+        	sharkDuration = true;
         }
 	}
 

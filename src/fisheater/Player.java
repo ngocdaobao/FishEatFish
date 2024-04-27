@@ -27,8 +27,8 @@ public class Player extends CoreObject
     public void setSpeedUp(boolean b)
     { speedUp = b; }
 
-    public void setSharkEat(boolean b)
-    { sharkEat = b; }
+    public void setSharkEat(boolean b) 
+    { sharkEat = b; } 
 
     public boolean getSharkEat()
     {
