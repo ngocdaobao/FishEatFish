@@ -9,11 +9,11 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public abstract class Music {
-	protected String file; //Địa chỉ file nhạc
-	protected Clip sound;
-	protected FloatControl gain;
-	protected double volume; //minVolume=0; maxVolume=1
+public class Music {
+	private String file; //Địa chỉ file nhạc
+	private Clip sound;
+	private FloatControl gain;
+	private double volume; //minVolume=0; maxVolume=1
     
     public Music(String path, double v) {
         file = path;
@@ -35,5 +35,26 @@ public abstract class Music {
     }
     
     //Phát nhạc
-    public abstract void play();
+    public void play() {
+    	sound.setFramePosition(0);
+		sound.start();
+    }
+    
+    //Vòng lặp
+    public void loop() {
+		if (!isPlaying()) {
+			sound.setFramePosition(0);
+			sound.start();
+			sound.loop(Clip.LOOP_CONTINUOUSLY);
+		}
+	}
+	
+	public void stop() {
+		if (isPlaying())
+			sound.stop();
+	}
+	
+	public boolean isPlaying() {
+        return sound.isActive();
+    }
 }
