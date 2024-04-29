@@ -84,7 +84,7 @@ public class CoreObject
 		double limit_Y = this.center.CTEY + enemy.center.CTEY;
 		double distance_Y = Math.abs(this.center.centerY - enemy.center.centerY);
 		
-		if ((distance_X <= limit_X) && (distance_Y<=limit_Y)) {
+		if ((distance_X <= limit_X) && (distance_Y<=limit_Y) && enemy.isVisible()) {
 			return true;
 		}
 		return false;	

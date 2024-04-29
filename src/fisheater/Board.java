@@ -1,7 +1,7 @@
 package fisheater;
 
-import music.LoopMusic;
-import music.SoundEffect;
+import music.Music;
+import music.MusicThread;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,7 +43,10 @@ public class Board extends JPanel implements Runnable
 
     private boolean inGame, inMenu, GameOver, quitGame, printDuration, sharkDuration;
     private Font font;
-    private LoopMusic gameMusic  = new LoopMusic("fisheater/resources/sounds/gameMusic.wav", 0.1);
+    private Music gameMusic  = new Music("fisheater/resources/sounds/gameMusic.wav", 0.3);
+    private MusicThread eat = new MusicThread("fisheater/resources/sounds/eat.wav", 0.5);
+    private MusicThread gameOver = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.5);
+    private MusicThread powerUp = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.5);
 
     public Board(int width, int height)
     {
@@ -283,7 +286,7 @@ public class Board extends JPanel implements Runnable
         {
             if(inGame)
             {
-            	gameMusic.play();
+            	gameMusic.loop();
                 if(pUp.isAlive())
                 {
                     pUp.move();
@@ -416,6 +419,7 @@ public class Board extends JPanel implements Runnable
 
 			if(player.EllipseCollision(f))
 			{
+				eat.play();
 				f.setVisible(false);
 				score += f.getPoints();
 			}
@@ -429,6 +433,7 @@ public class Board extends JPanel implements Runnable
 			{
                             if(player.getSharkEat())
                             {
+                            	eat.play();
                                 score += s.getPoints();
                                 s.setVisible(false);
                             }
@@ -437,12 +442,14 @@ public class Board extends JPanel implements Runnable
                                 player.setVisible(false);
                                 inGame = false;
                                 GameOver = true;
+                                gameOver.play();
                             }
 			}
 		}
 
         if(player.EllipseCollision(pUp))
         {
+        	powerUp.play();
             player.setSpeedUp(true);
             pUp.setVisible(false);
             pUp.setY(-10);
@@ -451,6 +458,7 @@ public class Board extends JPanel implements Runnable
 
         if (player.EllipseCollision(SharkEat))
         {
+        	powerUp.play();
         	player.setSharkEat(true);
         	SharkEat.setVisible(false);
         	SharkEat.setY(-10);
