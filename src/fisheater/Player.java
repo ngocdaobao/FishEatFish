@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 
 public class Player extends CoreObject {
     private int speed;
-    private String icon = "fisheater/resources/fish/smallPlayer";
+    private String icon = "fisheater/resources/fish/player";
     private boolean speedUp = false,
             sharkEat = false;
 

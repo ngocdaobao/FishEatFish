@@ -13,19 +13,19 @@ public class Fish extends CoreObject
         // extra small 15%
         if (random < threshold) {
             points = 1;
-            icon = "fisheater/resources/fish/mpurplefish";
+            icon = "fisheater/resources/fish/fish";
         } // small 25%
         else if (threshold <= random && random < threshold + 25) {
             points = 5;
-            icon = "fisheater/resources/fish/nemo";
+            icon = "fisheater/resources/fish/fish2";
         } // medium 20%
         else if (threshold + 25 <= random && random < threshold + 45) {
             points = 10;
-            icon = "fisheater/resources/fish/brownfish";
+            icon = "fisheater/resources/fish/fish3";
         } // large 20%
         else if (threshold + 45 <= random && random < threshold + 65) {
             points = 15;
-            icon = "fisheater/resources/fish/dory";
+            icon = "fisheater/resources/fish/fish4";
         } // extra large 15%
         else if (threshold + 65 <= random && random < threshold + 80) {
             points = 25;

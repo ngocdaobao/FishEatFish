@@ -27,7 +27,6 @@ public class Music {
 			double min = Math.pow(10.0, gain.getMinimum()/20.0);
 			float val = (float) (20.0*Math.log10(min+(max-min)*volume));
 			gain.setValue(val);
-			System.out.println(gain.getValue());
 		}
 		catch (UnsupportedAudioFileException e1) {System.out.println(e1); }
 		catch (IOException e2) {System.out.println(e2); }

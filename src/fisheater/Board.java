@@ -341,7 +341,10 @@ public class Board extends JPanel implements Runnable {
                 eat.play();
                 f.setVisible(false);
                 score += f.getPoints();
-                baseSpeed = score / 100;
+                baseSpeed = (int) (Math.log(score/25.0)/Math.log(2));
+                System.out.println(baseSpeed);
+                if (baseSpeed < 0)
+                    baseSpeed = 0;
                 if (baseSpeed > 8)
                     baseSpeed = 8;
                 player.setSpeed(baseSpeed + 2);
@@ -355,7 +358,9 @@ public class Board extends JPanel implements Runnable {
                 if (player.getSharkEat()) {
                     eat.play();
                     score += s.getPoints();
-                    baseSpeed = score / 100;
+                    baseSpeed = (int) (Math.log(score/25.0)/Math.log(2));
+                    if (baseSpeed < 0)
+                        baseSpeed = 0;
                     if (baseSpeed > 8)
                         baseSpeed = 8;
                     player.setSpeed(baseSpeed + 2);
