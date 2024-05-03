@@ -38,6 +38,7 @@ public class Board extends JPanel implements Runnable
     private PowerUp pUp;
     private EatShark SharkEat;
     private MenuSystem menu;
+    private int baseSpeed;
     private ArrayList <Fish> fish;
     private ArrayList <Shark> sharks;
 
@@ -77,11 +78,12 @@ public class Board extends JPanel implements Runnable
         SharkEat = new EatShark (0,0,0);
         fish   = new ArrayList();
         sharks = new ArrayList();
-        player = new Player(300,200, 5);
+        player = new Player(300,200, 2);
         printDuration = false;
 
         frameRate = 0;
         score     = 0;
+        baseSpeed = 0;
         pUp.setAlive(false);
         SharkEat.setAlive(false);
     }
@@ -108,24 +110,16 @@ public class Board extends JPanel implements Runnable
     	for(int i = 0; i < numFish; i ++)
     	{
             y = spawn + gen.nextInt(B_HEIGHT-spawn*3);
-        	speed = gen.nextInt(8) - 4;
-
-                if( speed == 0 )
-                {
-                    speed = 1;
-                }
-
-                if( speed > 0 )
-                {
-                    x = gen.nextInt(1000) + B_WIDTH;
-                    direction = "L";
-                }
-                else
-                {
-                    x = gen.nextInt(1000) - (B_WIDTH + 400);
-                    direction = "R";
-                }
-
+            speed = gen.nextInt(5)-2;
+        	if (speed > 0) {
+        		speed += baseSpeed;
+        		x = gen.nextInt(1000) + B_WIDTH;
+                direction = "L";
+        	} else {
+        		speed -= baseSpeed+1;
+        		x = gen.nextInt(1000) - (B_WIDTH + 400);
+                direction = "R";
+        	}
     		fish.add(new Fish(x,y,speed, direction));
     	}
     }
@@ -143,24 +137,16 @@ public class Board extends JPanel implements Runnable
     	for(int i = 0; i < numSharks; i ++)
     	{
             y = spawn + gen.nextInt(B_HEIGHT-spawn*3);
-        	speed = gen.nextInt(16) - 8;
-
-                if( speed == 0 )
-                {
-                    speed = 1;
-                }
-
-                if( speed > 0 )
-                {
-                    x = gen.nextInt(1000) + B_WIDTH;
-                    direction = "L";
-                }
-                else
-                {
-                    x = gen.nextInt(1000) - (B_WIDTH + 400);
-                    direction = "R";
-                }
-
+            speed = gen.nextInt(5)-2;
+        	if (speed > 0) {
+        		speed += baseSpeed;
+        		x = gen.nextInt(1000) + B_WIDTH;
+                direction = "L";
+        	} else {
+        		speed -= baseSpeed+1;
+        		x = gen.nextInt(1000) - (B_WIDTH + 400);
+                direction = "R";
+        	}
     		sharks.add(new Shark(x,y,speed, direction));
     	}
     }
@@ -232,7 +218,6 @@ public class Board extends JPanel implements Runnable
                 g.drawString(pUp.getName() + " Buff Duration: " + pUp.getDuration()/63 + "s", 10, 30);
             }
 
-
             if (SharkEat.isAlive() && SharkEat.isVisible())
             {
             	SharkEat.paint(g);
@@ -241,9 +226,6 @@ public class Board extends JPanel implements Runnable
             {
             	g.drawString(SharkEat.getName() + " Buff Duration: " + SharkEat.getDuration()/63 + "s", 10, 20);
             }
-
-
-
 
             g.setColor(Color.black);
             g.drawString("Score: " + score, 0, 10);
@@ -422,6 +404,10 @@ public class Board extends JPanel implements Runnable
 				eat.play();
 				f.setVisible(false);
 				score += f.getPoints();
+				baseSpeed = score/100;
+				if (baseSpeed>8)
+					baseSpeed=8;
+				player.setSpeed(baseSpeed+2);
 			}
 		}
 
@@ -435,6 +421,10 @@ public class Board extends JPanel implements Runnable
                             {
                             	eat.play();
                                 score += s.getPoints();
+                                baseSpeed = score/100;
+                				if (baseSpeed>8)
+                					baseSpeed=8;
+                				player.setSpeed(baseSpeed+2);
                                 s.setVisible(false);
                             }
                             else

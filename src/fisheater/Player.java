@@ -22,7 +22,11 @@ public class Player extends CoreObject
 
         this.speed = playerSpeed;
     }
-
+    
+    public void setSpeed(int s) {
+    	speed = s;
+    }
+    
     //get/set cho các thuộc tính speedUp và SharkEat
     public void setSpeedUp(boolean b)
     { speedUp = b; }
