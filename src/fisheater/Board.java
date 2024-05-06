@@ -1,5 +1,6 @@
 package fisheater;
 
+import music.Music;
 import music.MusicThread;
 
 import java.awt.Graphics;
