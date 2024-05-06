@@ -4,11 +4,25 @@ import java.awt.event.KeyEvent;
 
 public class Player extends CoreObject {
     private int speed;
-    private String icon = "fisheater/resources/fish/player";
+    private String icon = "fisheater/resources/fish/smallPlayer"; //update hinh anh playerfish o day
+
+    public void setIcon(String newicon){
+        this.icon = newicon;
+    }
     private boolean speedUp = false,
             sharkEat = false;
 
-    public Player(int x, int y, int playerSpeed) // constructor
+
+    private int level;
+    public int getLevel(){
+        return this.level;
+    }
+
+    public void setlevel(int playerlevel){
+        this.level = playerlevel;
+    }
+
+    public Player(int x, int y, int playerSpeed, int level) // constructor
     {
         super(x, y);
         String temp = "";
@@ -19,6 +33,8 @@ public class Player extends CoreObject {
         this.center = new Center();
 
         this.speed = playerSpeed;
+
+        this.level = level;
     }
 
     public void setSpeed(int s) {
