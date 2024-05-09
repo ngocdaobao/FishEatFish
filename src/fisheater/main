@@ -1,0 +1,49 @@
+package fisheater;
+import javax.swing.*;
+import javax.swing.ImageIcon;
+import java.awt.event.*;
+public class Main extends Player {
+    public static void main(String[] args) {
+        // Tạo cửa sổ JFrame
+        JFrame frame = new JFrame("Test");
+        frame.setSize(1280, 720);
+        frame.setLayout(null);
+
+        // Tạo và đặt ảnh nền
+        JLabel backgroundLabel = new JLabel();
+        ImageIcon backgroundImage = new ImageIcon("C:\\Users\\BaoPhuc\\Downloads\\phuc1.jpg");
+        backgroundLabel.setIcon(backgroundImage);
+        backgroundLabel.setBounds(0, 0, frame.getWidth(), frame.getHeight());
+
+        // Thêm ảnh nền vào JFrame
+        frame.add(backgroundLabel);
+
+        // Tạo JTextArea và thêm vào JFrame
+        JTextArea text = new JTextArea();
+        text.setEditable(true);
+        int textWidth = text.getPreferredSize().width;
+        int textHeight = text.getPreferredSize().height;
+        int x = (frame.getWidth() - textWidth) / 2 -50;
+        int y = (frame.getHeight() - textHeight) / 2;
+        text.setBounds(x, y, textWidth, textHeight);
+        text.setSize(100,100);
+        frame.add(text);
+        text.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Lấy văn bản từ JTextArea
+                String inputText = text.getText();
+                
+                // Gán tên từ văn bản nhập vào cho đối tượng Player
+                player.setName(inputText);
+                
+                // In ra tên của người chơi
+                System.out.println("Tên của người chơi: " + player.getName());
+            }
+        });
+        // Hiển thị JFrame
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+}
