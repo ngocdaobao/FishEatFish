@@ -206,7 +206,7 @@ public class Board extends JPanel implements Runnable {
             }
 
             g.setColor(Color.black);
-            g.drawString("Score:" + score, 0, 10);
+            g.drawString("Score: " + score, 0, 10);
         }
 
         else if (inMenu) {
