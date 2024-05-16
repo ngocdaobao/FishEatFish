@@ -18,39 +18,61 @@ public class Fish extends CoreObject
     public Fish(int x, int y, int speed, String direction, int fishlevel) {
         super(x, y);
         int random = new Random().nextInt(100);
-        int threshold = 15;
 
         //update hinh anh cac loai ca
         // extra small 15%
-        if (random < threshold) {
+        if (random < 10) {
             points = 1;
-            icon = "fisheater/resources/fish/mpurplefish";
+            icon = "fisheater/resources/fish/XSfish1";
+            level = 0;
+        } else if (10 <= random && random < 20) {
+            points = 1;
+            icon = "fisheater/resources/fish/XSfish2";
             level = 0;
         } // small 25%
-        else if (threshold <= random && random < threshold + 25) {
-            points = 5;
-            icon = "fisheater/resources/fish/nemo";
+        else if (20 <= random && random < 25) {
+            points = 2;
+            icon = "fisheater/resources/fish/Sfish1";
             level = 1;
-        } // medium 20%
-        else if (threshold + 25 <= random && random < threshold + 45) {
-            points = 10;
-            icon = "fisheater/resources/fish/brownfish";
+        } else if (25 <= random && random <= 40) {
+            points = 2;
+            icon = "fisheater/resources/fish/Sfish2";
+            level = 1;
+        }  // medium 20%
+        else if (40 <= random && random < 60) {
+            points = 5;
+            icon = "fisheater/resources/fish/Mhorsefish";
             level = 2;
         } // large 20%
-        else if (threshold + 45 <= random && random < threshold + 65) {
-            points = 15;
-            icon = "fisheater/resources/fish/dory";
+        else if (60 <= random && random < 70) {
+            points = 10;
+            icon = "fisheater/resources/fish/Lfish1";
             level = 3;
-        } // extra large 15%
-        else if (threshold + 65 <= random && random < threshold + 80) {
-            points = 25;
-            icon = "fisheater/resources/fish/catim";
+        } else if (70 <= random && random < 80) {
+            points = 10;
+            icon = "fisheater/resources/fish/Lfish2";
+            level = 3;
+        }
+        // extra large 15%
+        else if (80 <= random && random < 90) {
+            points = 15;
+            icon = "fisheater/resources/fish/XLfish1";
+            level = 4;
+        } else if (90 <= random && random < 95) {
+            points = 15;
+            icon = "fisheater/resources/fish/XLfish2";
             level = 4;
         } // rare fish 5%
-        else if (threshold + 80 <= random && random < threshold + 85) {
-            points = 50;
-            icon = "fisheater/resources/fish/canau";
+        else if (95 <= random && random < 97) {
+            points = 25;
+            icon = "fisheater/resources/fish/beta";
             level = 5;
+        }
+        else {
+            points = 25;
+            icon = "fisheater/resources/fish/zebra";
+            level = 5;
+
         }
 
         icon += direction + ".png";
