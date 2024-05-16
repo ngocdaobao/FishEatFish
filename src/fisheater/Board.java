@@ -35,8 +35,6 @@ public class Board extends JPanel implements Runnable {
     private EatShark SharkEat;
     private Menu menu;
     private int baseSpeed;
-
-    private int baseplayerlevel = 1;
     private ArrayList<Fish> fish;
     private ArrayList<Shark> sharks;
 
@@ -74,7 +72,7 @@ public class Board extends JPanel implements Runnable {
         SharkEat = new EatShark(0, 0, 0);
         fish = new ArrayList();
         sharks = new ArrayList();
-        player = new Player(300, 200, 2, baseplayerlevel);
+        player = new Player(300, 200, 2);
         printDuration = false;
 
         frameRate = 0;
@@ -92,19 +90,18 @@ public class Board extends JPanel implements Runnable {
     }
 
     public void genFish() {
-        Fish temp = new Fish(-100, -100, 0, "L", 0);
+        Fish temp = new Fish(-100, -100, 0, "L");
         int spawn = temp.getHeight();
         temp.setVisible(false);
 
         Random gen = new Random();
         String direction = "";
-        int x, y, speed, fishlevel;
+        int x, y, speed;
         int numFish = gen.nextInt(10) + 10;
 
         for (int i = 0; i < numFish; i++) {
             y = spawn + gen.nextInt(B_HEIGHT - spawn * 3);
             speed = gen.nextInt(5) - 2;
-            fishlevel = gen.nextInt(7);
             if (speed > 0) {
                 speed += baseSpeed;
                 x = gen.nextInt(1000) + B_WIDTH;
@@ -114,7 +111,7 @@ public class Board extends JPanel implements Runnable {
                 x = gen.nextInt(1000) - (B_WIDTH + 400);
                 direction = "R";
             }
-            fish.add(new Fish(x, y, speed, direction, fishlevel));
+            fish.add(new Fish(x, y, speed, direction));
         }
     }
 
@@ -227,7 +224,7 @@ public class Board extends JPanel implements Runnable {
         }
 
         g2d.setColor(Color.white);
-//        g2d.drawString("Framerate = " + frameRate, B_WIDTH / 2, 15);
+        g2d.drawString("Framerate = " + frameRate, B_WIDTH / 2, 15);
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
@@ -335,75 +332,22 @@ public class Board extends JPanel implements Runnable {
         }
     }
 
-    //có 6 loại cá, set 6 level từ 1 đến 6
-    public int convertScore2level(int score) {
-        if (score < 3) {
-            return 1;
-        } else if (3 <= score && score < 50) {
-            return 2;
-        } else if (50 <= score && score < 200) {
-            return 3;
-        } else if (200 <= score && score < 500) {
-            return 4;
-        } else if (500 <= score && score < 700) {
-            return 5;
-        } else {
-            return 6;
-        }
-    }
-
-    //enlarge playerfish
-    //update hinh anh playerfish cac level o day
-    public void enlargePlayer(int playerlevel){
-        switch (playerlevel){
-            case 1:
-                player.setIcon("fisheater/resources/fish/smallPlayer");
-                break;
-            case 2:
-                player.setIcon("fisheater/resources/fish/mpurplefish");
-                break;
-            case 3:
-                player.setIcon("fisheater/resources/fish/nemo");
-                break;
-            case 4:
-                player.setIcon("fisheater/resources/fish/dory");
-                break;
-            case 5:
-                player.setIcon("fisheater/resources/fish/catim");
-                break;
-            case 6:
-                player.setIcon("fisheater/resources/fish/canau");
-                break;
-        }
-    }
-
     public void checkCollisions() {
 
         for (int i = 0; i < fish.size(); i++) {
             Fish f = (Fish) fish.get(i);
 
             if (player.EllipseCollision(f)) {
-                //chi co the an fish co level nho hon
-            if (player.getLevel() > f.getLevel() ) {
                 eat.play();
                 f.setVisible(false);
                 score += f.getPoints();
-                //update level va tang kich thuoc neu level up
-                player.setlevel(convertScore2level(score));
-                enlargePlayer(convertScore2level(score));
-                baseSpeed = (int) (Math.log(score / 25.0) / Math.log(2));
+                baseSpeed = (int) (Math.log(score/25.0)/Math.log(2));
                 System.out.println(baseSpeed);
                 if (baseSpeed < 0)
                     baseSpeed = 0;
                 if (baseSpeed > 8)
                     baseSpeed = 8;
                 player.setSpeed(baseSpeed + 2);
-            } else {
-                player.setVisible(false);
-                inGame = false;
-                GameOver = true;
-                gameOver.play();
-            }
             }
         }
 
@@ -414,8 +358,6 @@ public class Board extends JPanel implements Runnable {
                 if (player.getSharkEat()) {
                     eat.play();
                     score += s.getPoints();
-                    player.setlevel(convertScore2level(score));
-                    enlargePlayer(convertScore2level(score));
                     baseSpeed = (int) (Math.log(score/25.0)/Math.log(2));
                     if (baseSpeed < 0)
                         baseSpeed = 0;
