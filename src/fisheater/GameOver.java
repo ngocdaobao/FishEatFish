@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 public class GameOver extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/GameOver.jpg";
+    private String backgroundImageUrl = "fisheater/resources/menus/GameOver.png";
 
     int[] replayBtn = { 432, 458, 506, 827 };
     JLabel scoreLabel;
