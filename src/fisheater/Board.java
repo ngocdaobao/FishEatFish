@@ -3,11 +3,7 @@ package fisheater;
 import music.Music;
 import music.MusicThread;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,7 +11,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Font;
 
 import javax.swing.JPanel;
 
@@ -31,12 +26,15 @@ public class Board extends JPanel implements Runnable {
 
     private Player player;
     private Background bg;
+
     private PowerUp pUp;
     private EatShark SharkEat;
     private Menu menu;
     private int baseSpeed;
+    private int prevPlayerlevel = 1;
 
-    private int baseplayerlevel = 1;
+    private int newPlayerlevel;
+
     private ArrayList<Fish> fish;
     private ArrayList<Shark> sharks;
 
@@ -46,6 +44,17 @@ public class Board extends JPanel implements Runnable {
     private MusicThread eat = new MusicThread("fisheater/resources/sounds/eat.wav", 0.5);
     private MusicThread gameOver = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.5);
     private MusicThread powerUp = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.5);
+
+    public void pauseGame(int durationMillis) {
+        DelayThread delayThread = new DelayThread(durationMillis);
+        delayThread.start();
+
+        try {
+            delayThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Board(int width, int height) {
         addMouseListener(new mouseAdapter());
@@ -74,7 +83,7 @@ public class Board extends JPanel implements Runnable {
         SharkEat = new EatShark(0, 0, 0);
         fish = new ArrayList();
         sharks = new ArrayList();
-        player = new Player(300, 200, 2, baseplayerlevel);
+        player = new Player(300, 200, 2, prevPlayerlevel);
         printDuration = false;
 
         frameRate = 0;
@@ -125,7 +134,7 @@ public class Board extends JPanel implements Runnable {
         Random gen = new Random();
         String direction = "";
         int x, y, speed;
-        int numSharks = gen.nextInt(9) + 1;
+        int numSharks = gen.nextInt(5) + 1;
 
         for (int i = 0; i < numSharks; i++) {
             y = spawn + gen.nextInt(B_HEIGHT - spawn * 3);
@@ -157,8 +166,9 @@ public class Board extends JPanel implements Runnable {
         int x = (SharkEat.getWidth() + gen.nextInt(B_WIDTH - SharkEat.getWidth() * 3)),
                 y = -gen.nextInt(B_HEIGHT) - 500,
                 speed = gen.nextInt(5) + 3;
-
-        SharkEat = new EatShark(x, y, speed);
+        boolean eat = new Random().nextBoolean();
+        if (eat) {
+        SharkEat = new EatShark(x, y, speed);}
     }
 
     @Override
@@ -180,7 +190,6 @@ public class Board extends JPanel implements Runnable {
         if (inGame) {
             bg.paint(g);
             player.paint(g);
-
             for (Object fish1 : fish) {
                 Fish f = (Fish) fish1;
                 f.paint(g);
@@ -191,22 +200,39 @@ public class Board extends JPanel implements Runnable {
                 sh.paint(g);
             }
 
+
+            Font scoreFont = new Font("Comic Sans MS", Font.BOLD, 45);
+            Font notiFont = new Font("Comic Sans MS", Font.BOLD, 30);
+            Color customColor = new Color(0x00, 0x97, 0xB2);
+            Color notiColor = new Color(0xFF, 0x57, 0x57);
+
+
+            boolean pUpInfoDrawn = false;
+            boolean sharkEatInfoDrawn = false;
+
             if (pUp.isAlive() && pUp.isVisible()) {
                 pUp.paint(g);
+                pUpInfoDrawn = true;
             }
-            if (printDuration && pUp.isAlive()) {
-                g.drawString(pUp.getName() + " Buff Duration: " + pUp.getDuration() / 63 + "s", 10, 30);
+            if (printDuration && pUp.isAlive() && !pUpInfoDrawn) {
+                g.setFont(notiFont);
+                g.setColor(notiColor);
+                g.drawString(pUp.getName() + " in: " + pUp.getDuration() / 63 + "s", 800, 60);
             }
 
             if (SharkEat.isAlive() && SharkEat.isVisible()) {
                 SharkEat.paint(g);
+                sharkEatInfoDrawn = true;
             }
-            if (sharkDuration && SharkEat.isAlive()) {
-                g.drawString(SharkEat.getName() + " Buff Duration: " + SharkEat.getDuration() / 63 + "s", 10, 20);
+            if (sharkDuration && SharkEat.isAlive() && !sharkEatInfoDrawn) {
+                g.setColor(notiColor);
+                g.setFont(notiFont);
+                g.drawString(SharkEat.getName() + " in: " + SharkEat.getDuration() / 63 + "s", 800, 35);
             }
-
-            g.setColor(Color.black);
-            g.drawString("Score: " + score, 0, 10);
+            g.setColor(customColor);
+            g.setFont(scoreFont);
+            g.drawString(" " + score, 130, 45);
+            g.drawString("  " + convertScore2level(score), 450, 45);
         }
 
         else if (inMenu) {
@@ -231,7 +257,11 @@ public class Board extends JPanel implements Runnable {
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
+
     }
+
+
+
 
     public void run() {
         long beforeTime, timeDiff, sleep, frameRateTimer;
@@ -337,15 +367,15 @@ public class Board extends JPanel implements Runnable {
 
     //có 6 loại cá, set 6 level từ 1 đến 6
     public int convertScore2level(int score) {
-        if (score < 3) {
+        if (score < 6) {
             return 1;
-        } else if (3 <= score && score < 50) {
+        } else if ( 6 <= score && score < 50) {
             return 2;
         } else if (50 <= score && score < 200) {
             return 3;
-        } else if (200 <= score && score < 500) {
+        } else if (200 <= score && score < 1000) {
             return 4;
-        } else if (500 <= score && score < 700) {
+        } else if (1000 <= score && score < 3000) {
             return 5;
         } else {
             return 6;
@@ -357,22 +387,22 @@ public class Board extends JPanel implements Runnable {
     public void enlargePlayer(int playerlevel){
         switch (playerlevel){
             case 1:
-                player.setIcon("fisheater/resources/fish/smallPlayer");
+                player.setIcon("fisheater/resources/fish/player1");
                 break;
             case 2:
-                player.setIcon("fisheater/resources/fish/mpurplefish");
+                player.setIcon("fisheater/resources/fish/player2");
                 break;
             case 3:
-                player.setIcon("fisheater/resources/fish/nemo");
+                player.setIcon("fisheater/resources/fish/player3");
                 break;
             case 4:
-                player.setIcon("fisheater/resources/fish/dory");
+                player.setIcon("fisheater/resources/fish/player4");
                 break;
             case 5:
-                player.setIcon("fisheater/resources/fish/catim");
+                player.setIcon("fisheater/resources/fish/player5");
                 break;
             case 6:
-                player.setIcon("fisheater/resources/fish/canau");
+                player.setIcon("fisheater/resources/fish/player6");
                 break;
         }
     }
@@ -387,10 +417,18 @@ public class Board extends JPanel implements Runnable {
             if (player.getLevel() > f.getLevel() ) {
                 eat.play();
                 f.setVisible(false);
+                prevPlayerlevel = convertScore2level(score);
                 score += f.getPoints();
+                newPlayerlevel = convertScore2level(score);
+
                 //update level va tang kich thuoc neu level up
-                player.setlevel(convertScore2level(score));
-                enlargePlayer(convertScore2level(score));
+                if (prevPlayerlevel < convertScore2level(score)){
+
+                    enlargePlayer(newPlayerlevel);
+                    player.setlevel(newPlayerlevel);
+
+                }
+
                 baseSpeed = (int) (Math.log(score / 25.0) / Math.log(2));
                 System.out.println(baseSpeed);
                 if (baseSpeed < 0)
