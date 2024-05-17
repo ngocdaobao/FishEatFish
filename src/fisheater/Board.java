@@ -30,7 +30,6 @@ public class Board extends JPanel implements Runnable {
     private PowerUp pUp;
     private EatShark SharkEat;
     private Menu menu;
-    private int baseSpeed;
     private int prevPlayerlevel = 1;
 
     private int newPlayerlevel;
@@ -83,14 +82,14 @@ public class Board extends JPanel implements Runnable {
         SharkEat = new EatShark(0, 0, 0);
         fish = new ArrayList();
         sharks = new ArrayList();
-        player = new Player(300, 200, 2, prevPlayerlevel);
+        player = new Player(300, 200, 2, 1);
         printDuration = false;
 
         frameRate = 0;
         score = 0;
-        baseSpeed = 0;
         pUp.setAlive(false);
         SharkEat.setAlive(false);
+        System.out.print("\n");
     }
 
     @Override
@@ -115,14 +114,15 @@ public class Board extends JPanel implements Runnable {
             speed = gen.nextInt(5) - 2;
             fishlevel = gen.nextInt(7);
             if (speed > 0) {
-                speed += baseSpeed;
+                speed += player.getLevel() - 1;
                 x = gen.nextInt(1000) + B_WIDTH;
                 direction = "L";
             } else {
-                speed -= baseSpeed + 1;
+                speed -= player.getLevel();
                 x = gen.nextInt(1000) - (B_WIDTH + 400);
                 direction = "R";
             }
+            System.out.print(speed + "  ");
             fish.add(new Fish(x, y, speed, direction, fishlevel));
         }
     }
@@ -140,11 +140,11 @@ public class Board extends JPanel implements Runnable {
             y = spawn + gen.nextInt(B_HEIGHT - spawn * 3);
             speed = gen.nextInt(5) - 2;
             if (speed > 0) {
-                speed += baseSpeed;
+                speed += player.getLevel() - 1;
                 x = gen.nextInt(1000) + B_WIDTH;
                 direction = "L";
             } else {
-                speed -= baseSpeed + 1;
+                speed -= player.getLevel();
                 x = gen.nextInt(1000) - (B_WIDTH + 400);
                 direction = "R";
             }
@@ -429,13 +429,7 @@ public class Board extends JPanel implements Runnable {
 
                 }
 
-                baseSpeed = (int) (Math.log(score / 25.0) / Math.log(2));
-                System.out.println(baseSpeed);
-                if (baseSpeed < 0)
-                    baseSpeed = 0;
-                if (baseSpeed > 8)
-                    baseSpeed = 8;
-                player.setSpeed(baseSpeed + 2);
+                player.setSpeed(player.getLevel() + 1);
             } else {
                 player.setVisible(false);
                 inGame = false;
@@ -454,12 +448,7 @@ public class Board extends JPanel implements Runnable {
                     score += s.getPoints();
                     player.setlevel(convertScore2level(score));
                     enlargePlayer(convertScore2level(score));
-                    baseSpeed = (int) (Math.log(score/25.0)/Math.log(2));
-                    if (baseSpeed < 0)
-                        baseSpeed = 0;
-                    if (baseSpeed > 8)
-                        baseSpeed = 8;
-                    player.setSpeed(baseSpeed + 2);
+                    player.setSpeed(player.getLevel() + 1);
                     s.setVisible(false);
                 } else {
                     player.setVisible(false);

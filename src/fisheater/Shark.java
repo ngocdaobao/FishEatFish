@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 public class Shark extends CoreObject
 {
 	private String icon = "fisheater/resources/fish/Shark";
-	private int points = 100;
+	private int points = 25;
 	
 	public Shark(int x, int y, int speed, String direction)
 	{

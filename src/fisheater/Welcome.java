@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
  */
 public class Welcome extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/Welcome.jpg";
+    private String backgroundImageUrl = "fisheater/resources/menus/Welcome.png";
 
     int[] startBtn = { 262, 458, 335, 827 }; // top left down right
     int[] tutorialBtn = { 369, 458, 443, 827 };

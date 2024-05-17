@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 public class Window extends JFrame
 {
     private final int WIDTH = 1280;
-    private final int HEIGHT = 720;
+    private final int HEIGHT = 755;
     public Window()
     {
         add( new Board( WIDTH, HEIGHT ));
