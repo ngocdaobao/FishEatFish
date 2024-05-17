@@ -40,9 +40,9 @@ public class Board extends JPanel implements Runnable {
     private boolean inGame, inMenu, GameOver, quitGame, printDuration, sharkDuration;
     private Font font;
     private Music gameMusic = new Music("fisheater/resources/sounds/gameMusic.wav", 0.3);
-    private MusicThread eat = new MusicThread("fisheater/resources/sounds/eat.wav", 0.5);
-    private MusicThread gameOver = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.5);
-    private MusicThread powerUp = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.5);
+    private MusicThread eatSound = new MusicThread("fisheater/resources/sounds/eat.wav", 0.5);
+    private MusicThread gameOverSound = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.5);
+    private MusicThread powerUpSound = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.5);
 
     /*public void pauseGame(int durationMillis) {
         DelayThread delayThread = new DelayThread(durationMillis);
@@ -70,7 +70,7 @@ public class Board extends JPanel implements Runnable {
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
 
-        font = new Font("Helvetica", Font.BOLD, 24);
+        font = new Font("Comic Sans MS", Font.BOLD, 45);
 
         initGame();
     }
@@ -89,7 +89,6 @@ public class Board extends JPanel implements Runnable {
         score = 0;
         pUp.setAlive(false);
         SharkEat.setAlive(false);
-        System.out.print("\n");
     }
 
     @Override
@@ -122,7 +121,6 @@ public class Board extends JPanel implements Runnable {
                 x = gen.nextInt(1000) - (B_WIDTH + 400);
                 direction = "R";
             }
-            System.out.print(speed + "  ");
             fish.add(new Fish(x, y, speed, direction, fishlevel));
         }
     }
@@ -248,7 +246,7 @@ public class Board extends JPanel implements Runnable {
             g2d.setFont(font);
             g2d.drawString("" + score, B_WIDTH / 2 - 10, B_HEIGHT / 2 - 50);
 
-            g2d.setFont(new Font("Helvetica", Font.PLAIN, 12));
+            g2d.setFont(new Font("Helvetica", Font.PLAIN, 120));
 
         }
 
@@ -415,7 +413,7 @@ public class Board extends JPanel implements Runnable {
             if (player.EllipseCollision(f)) {
                 //chi co the an fish co level nho hon
             if (player.getLevel() > f.getLevel() ) {
-                eat.play();
+                eatSound.play();
                 f.setVisible(false);
                 prevPlayerlevel = convertScore2level(score);
                 score += f.getPoints();
@@ -434,7 +432,7 @@ public class Board extends JPanel implements Runnable {
                 player.setVisible(false);
                 inGame = false;
                 GameOver = true;
-                gameOver.play();
+                gameOverSound.play();
             }
             }
         }
@@ -444,7 +442,7 @@ public class Board extends JPanel implements Runnable {
 
             if (player.EllipseCollision(s)) {
                 if (player.getSharkEat()) {
-                    eat.play();
+                    eatSound.play();
                     score += s.getPoints();
                     player.setlevel(convertScore2level(score));
                     enlargePlayer(convertScore2level(score));
@@ -454,13 +452,13 @@ public class Board extends JPanel implements Runnable {
                     player.setVisible(false);
                     inGame = false;
                     GameOver = true;
-                    gameOver.play();
+                    gameOverSound.play();
                 }
             }
         }
 
         if (player.EllipseCollision(pUp)) {
-            powerUp.play();
+            powerUpSound.play();
             player.setSpeedUp(true);
             pUp.setVisible(false);
             pUp.setY(-10);
@@ -468,7 +466,7 @@ public class Board extends JPanel implements Runnable {
         }
 
         if (player.EllipseCollision(SharkEat)) {
-            powerUp.play();
+            powerUpSound.play();
             player.setSharkEat(true);
             SharkEat.setVisible(false);
             SharkEat.setY(-10);

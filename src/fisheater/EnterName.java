@@ -5,14 +5,14 @@ import javax.swing.*;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
-public class GameOver extends JPanel {
+public class EnterName extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/GameOver.png";
+    private String backgroundImageUrl = "fisheater/resources/menus/EnterName.png";
 
-    int[] replayBtn = { 432, 458, 506, 827 };
+    int[] submitBtn = { 432, 458, 506, 827 };
     JLabel scoreLabel;
 
-    public GameOver(int width, int height) {
+    public EnterName(int width, int height) {
         setSize(width, height);
         setLocation(0, 0);
         setScore(0);
@@ -33,9 +33,9 @@ public class GameOver extends JPanel {
     public boolean replayPressed(MouseEvent e) {
         double x = e.getX();
         double y = e.getY();
-        if (x < replayBtn[1] || x > replayBtn[3])
+        if (x < submitBtn[1] || x > submitBtn[3])
             return false;
-        if (y < replayBtn[0] || y > replayBtn[2])
+        if (y < submitBtn[0] || y > submitBtn[2])
             return false;
         return true;
     }
