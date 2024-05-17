@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 
 public class Background extends CoreObject
 {
-	private String icon = "fisheater/resources/background/background.jpg"; // image location
+	private String icon = "fisheater/resources/background/background.png"; // image location
 	
 	public Background(int x, int y)
 	{

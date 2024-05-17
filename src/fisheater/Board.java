@@ -45,7 +45,7 @@ public class Board extends JPanel implements Runnable {
     private MusicThread gameOver = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.5);
     private MusicThread powerUp = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.5);
 
-    public void pauseGame(int durationMillis) {
+    /*public void pauseGame(int durationMillis) {
         DelayThread delayThread = new DelayThread(durationMillis);
         delayThread.start();
 
@@ -54,7 +54,7 @@ public class Board extends JPanel implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public Board(int width, int height) {
         addMouseListener(new mouseAdapter());
