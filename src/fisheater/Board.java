@@ -40,9 +40,9 @@ public class Board extends JPanel implements Runnable {
     private boolean inGame, inMenu, GameOver, quitGame, printDuration, sharkDuration;
     private Font font;
     private Music gameMusic = new Music("fisheater/resources/sounds/gameMusic.wav", 0.3);
-    private MusicThread eatSound = new MusicThread("fisheater/resources/sounds/eat.wav", 0.5);
-    private MusicThread gameOverSound = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.5);
-    private MusicThread powerUpSound = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.5);
+    private MusicThread eatSound = new MusicThread("fisheater/resources/sounds/eat.wav", 0.3);
+    private MusicThread gameOverSound = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.3);
+    private MusicThread powerUpSound = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.3);
 
     /*public void pauseGame(int durationMillis) {
         DelayThread delayThread = new DelayThread(durationMillis);

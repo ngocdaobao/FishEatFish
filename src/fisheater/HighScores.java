@@ -1,6 +1,7 @@
 package fisheater;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.NoSuchElementException;
@@ -14,9 +15,9 @@ public class HighScores {
 			score = s;
 		}
 	}
-	File file;
-	int playerCount = 0;
-	HighPlayer[] player = new HighPlayer[3];
+	private File file;
+	private int playerCount = 0;
+	private HighPlayer[] player = new HighPlayer[3];
 	HighScores() {
 		file = new File("src/fisheater/resources/score.txt");
 		try {
@@ -24,8 +25,10 @@ public class HighScores {
 				Scanner scan = new Scanner(file);
 				while (scan.hasNextLine()) {
 					String name = scan.nextLine();
-					int score = Integer.valueOf(scan.nextLine());
-					addHighScore(name, score);
+					if (scan.hasNextLine()) {
+						int score = Integer.valueOf(scan.nextLine());
+						addHighScore(name, score);
+					}
 			    }
 			 }
 		} catch (IOException e) {
@@ -43,19 +46,33 @@ public class HighScores {
 			return false;
 	}
 	public void addHighScore(String name, int score) {
-		int rank = 0;
-		for (; rank<playerCount; rank++) {
-			if (player[rank].score < score)
-				break;
+		if (checkHighScore(score)) {
+			int rank = 0;
+			for (; rank<playerCount; rank++) {
+				if (player[rank].score < score)
+					break;
+			}
+			for (int i=2; i>rank; i--) {
+				player[i] = player[i-1];
+			}
+			player[rank] = new HighPlayer(name, score);
+			if (playerCount < 3)
+				playerCount++;
+			saveToFile();
 		}
-		for (int i=2; i>rank; i--) {
-			player[i] = player[i-1];
-		}
-		player[rank] = new HighPlayer(name, score);
-		if (playerCount < 3)
-			playerCount++;
 	}
-	
+	public void saveToFile() {
+		try {
+			FileWriter writer = new FileWriter(file);
+			String output="";
+			for (int i=0; i<playerCount; i++)
+				output += player[i].name + '\n' + player[i].score + '\n';
+			writer.write(output);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	public static void main(String[] args) {
 		HighScores h = new HighScores();
 		h.addHighScore("sd", 16);

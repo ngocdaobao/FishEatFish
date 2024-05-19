@@ -1,7 +1,6 @@
 package fisheater;
 
 import javax.swing.*;
-
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
