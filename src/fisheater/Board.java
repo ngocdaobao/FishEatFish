@@ -248,8 +248,35 @@ public class Board extends JPanel implements Runnable {
             g2d.drawImage(menu.getMenuBackgroundImage("tutorial"), 0, 0, this);
         } else if (inHighScore) {
             g2d.drawImage(menu.getMenuBackgroundImage("highScore"), 0, 0, this);
+            g2d.setColor(Color.yellow);
+            g2d.setFont(font);
+            int textWidth = g2d.getFontMetrics().stringWidth(highScore.getName(0));
+            int horizontalPosition = 655 - (textWidth / 2);
+            int verticalPosition = 280;
+            g2d.drawString(highScore.getName(0), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getName(1));
+            horizontalPosition = 435 - (textWidth / 2);
+            verticalPosition = 370;
+            g2d.drawString(highScore.getName(1), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getName(2));
+            horizontalPosition = 860 - (textWidth / 2);
+            verticalPosition = 420;
+            g2d.drawString(highScore.getName(2), horizontalPosition, verticalPosition);
+            
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(0));
+            horizontalPosition = 655 - (textWidth / 2);
+            verticalPosition = 350;
+            g2d.drawString(highScore.getScore(0), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(1));
+            horizontalPosition = 435 - (textWidth / 2);
+            verticalPosition = 440;
+            g2d.drawString(highScore.getScore(1), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(2));
+            horizontalPosition = 860 - (textWidth / 2);
+            verticalPosition = 490;
+            g2d.drawString(highScore.getScore(2), horizontalPosition, verticalPosition);
         } else if (GameOver) {
-            g2d.drawImage(menu.getMenuBackgroundImage("gameover"), 0, 0, this);
+            g2d.drawImage(menu.getMenuBackgroundImage("gameOver"), 0, 0, this);
 
             g2d.setColor(Color.yellow);
             g2d.setFont(font);
@@ -356,9 +383,7 @@ public class Board extends JPanel implements Runnable {
                 }
                 player.move();
                 checkCollisions();
-            } else if (inMenu) {
-                gameMusic.stop();
-            } else if (GameOver) {
+            } else {
                 gameMusic.stop();
             }
 
