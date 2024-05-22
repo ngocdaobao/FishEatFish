@@ -23,6 +23,7 @@ public class Board extends JPanel implements Runnable {
     private float frameRate;
     private Thread thread;
     private final int DELAY = 16;
+    private int maxPlayerNameLength = 12;
 
     private Player player;
     private Background bg;
@@ -30,30 +31,35 @@ public class Board extends JPanel implements Runnable {
     private PowerUp pUp;
     private EatShark SharkEat;
     private Menu menu;
+    private HighScores highScore;
     private int prevPlayerlevel = 1;
 
+    private String playerName;
     private int newPlayerlevel;
 
     private ArrayList<Fish> fish;
     private ArrayList<Shark> sharks;
 
-    private boolean inGame, inMenu, GameOver, quitGame, printDuration, sharkDuration;
+    private boolean inGame, inMenu, inTutorial, inHighScore, inEnterName, GameOver, quitGame, printDuration,
+            sharkDuration;
     private Font font;
     private Music gameMusic = new Music("fisheater/resources/sounds/gameMusic.wav", 0.3);
     private MusicThread eatSound = new MusicThread("fisheater/resources/sounds/eat.wav", 0.3);
     private MusicThread gameOverSound = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.3);
     private MusicThread powerUpSound = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.3);
 
-    /*public void pauseGame(int durationMillis) {
-        DelayThread delayThread = new DelayThread(durationMillis);
-        delayThread.start();
-
-        try {
-            delayThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
+    /*
+     * public void pauseGame(int durationMillis) {
+     * DelayThread delayThread = new DelayThread(durationMillis);
+     * delayThread.start();
+     * 
+     * try {
+     * delayThread.join();
+     * } catch (InterruptedException e) {
+     * e.printStackTrace();
+     * }
+     * }
+     */
 
     public Board(int width, int height) {
         addMouseListener(new mouseAdapter());
@@ -66,6 +72,8 @@ public class Board extends JPanel implements Runnable {
         inGame = false;
         GameOver = false;
         quitGame = false;
+        inTutorial = false;
+        inHighScore = false;
 
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
@@ -83,7 +91,9 @@ public class Board extends JPanel implements Runnable {
         fish = new ArrayList();
         sharks = new ArrayList();
         player = new Player(300, 200, 2, 1);
+        highScore = new HighScores();
         printDuration = false;
+        playerName = "";
 
         frameRate = 0;
         score = 0;
@@ -166,7 +176,8 @@ public class Board extends JPanel implements Runnable {
                 speed = gen.nextInt(5) + 3;
         boolean eat = new Random().nextBoolean();
         if (eat) {
-        SharkEat = new EatShark(x, y, speed);}
+            SharkEat = new EatShark(x, y, speed);
+        }
     }
 
     @Override
@@ -198,12 +209,10 @@ public class Board extends JPanel implements Runnable {
                 sh.paint(g);
             }
 
-
             Font scoreFont = new Font("Comic Sans MS", Font.BOLD, 45);
             Font notiFont = new Font("Comic Sans MS", Font.BOLD, 30);
             Color customColor = new Color(0x00, 0x97, 0xB2);
             Color notiColor = new Color(0xFF, 0x57, 0x57);
-
 
             boolean pUpInfoDrawn = false;
             boolean sharkEatInfoDrawn = false;
@@ -234,13 +243,40 @@ public class Board extends JPanel implements Runnable {
         }
 
         else if (inMenu) {
-            // g2d.drawImage(menu.getMenu(), 0, 0, this);
-            g2d.drawImage(menu.getMenu("welcome"), 0, 0, this);
-        }
-
-        else if (GameOver) {
-            // g2d.drawImage(menu.getGameOver(), 0, 0, this);
-            g2d.drawImage(menu.getMenu("gameover"), 0, 0, this);
+            g2d.drawImage(menu.getMenuBackgroundImage("welcome"), 0, 0, this);
+        } else if (inTutorial) {
+            g2d.drawImage(menu.getMenuBackgroundImage("tutorial"), 0, 0, this);
+        } else if (inHighScore) {
+            g2d.drawImage(menu.getMenuBackgroundImage("highScore"), 0, 0, this);
+            g2d.setColor(Color.yellow);
+            g2d.setFont(font);
+            int textWidth = g2d.getFontMetrics().stringWidth(highScore.getName(0));
+            int horizontalPosition = 655 - (textWidth / 2);
+            int verticalPosition = 280;
+            g2d.drawString(highScore.getName(0), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getName(1));
+            horizontalPosition = 435 - (textWidth / 2);
+            verticalPosition = 370;
+            g2d.drawString(highScore.getName(1), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getName(2));
+            horizontalPosition = 860 - (textWidth / 2);
+            verticalPosition = 420;
+            g2d.drawString(highScore.getName(2), horizontalPosition, verticalPosition);
+            
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(0));
+            horizontalPosition = 655 - (textWidth / 2);
+            verticalPosition = 350;
+            g2d.drawString(highScore.getScore(0), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(1));
+            horizontalPosition = 435 - (textWidth / 2);
+            verticalPosition = 440;
+            g2d.drawString(highScore.getScore(1), horizontalPosition, verticalPosition);
+            textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(2));
+            horizontalPosition = 860 - (textWidth / 2);
+            verticalPosition = 490;
+            g2d.drawString(highScore.getScore(2), horizontalPosition, verticalPosition);
+        } else if (GameOver) {
+            g2d.drawImage(menu.getMenuBackgroundImage("gameOver"), 0, 0, this);
 
             g2d.setColor(Color.yellow);
             g2d.setFont(font);
@@ -248,18 +284,34 @@ public class Board extends JPanel implements Runnable {
 
             g2d.setFont(new Font("Helvetica", Font.PLAIN, 120));
 
+        } else if (inEnterName) {
+            g2d.drawImage(menu.getMenuBackgroundImage("enterName"), 0, 0, this);
+
+            g2d.setColor(Color.yellow);
+            g2d.setFont(font);
+
+            int textWidth = g2d.getFontMetrics().stringWidth("" + score);
+            int horizontalPosition = (B_WIDTH / 2) - (textWidth / 2);
+            int verticalPosition = B_HEIGHT / 2;
+            g2d.drawString("" + score, horizontalPosition, verticalPosition);
+
+            g2d.setColor(Color.black);
+            textWidth = g2d.getFontMetrics().stringWidth(playerName);
+            horizontalPosition = (B_WIDTH / 2) - (textWidth / 2);
+            verticalPosition = 580;
+
+            g2d.drawString(playerName, horizontalPosition, verticalPosition);
+
+            g2d.setFont(new Font("Helvetica", Font.PLAIN, 120));
         }
 
         g2d.setColor(Color.white);
-//        g2d.drawString("Framerate = " + frameRate, B_WIDTH / 2, 15);
+        // g2d.drawString("Framerate = " + frameRate, B_WIDTH / 2, 15);
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
 
     }
-
-
-
 
     public void run() {
         long beforeTime, timeDiff, sleep, frameRateTimer;
@@ -331,9 +383,7 @@ public class Board extends JPanel implements Runnable {
                 }
                 player.move();
                 checkCollisions();
-            } else if (inMenu) {
-                gameMusic.stop();
-            } else if (GameOver) {
+            } else {
                 gameMusic.stop();
             }
 
@@ -363,11 +413,11 @@ public class Board extends JPanel implements Runnable {
         }
     }
 
-    //có 6 loại cá, set 6 level từ 1 đến 6
+    // có 6 loại cá, set 6 level từ 1 đến 6
     public int convertScore2level(int score) {
         if (score < 6) {
             return 1;
-        } else if ( 6 <= score && score < 50) {
+        } else if (6 <= score && score < 50) {
             return 2;
         } else if (50 <= score && score < 200) {
             return 3;
@@ -380,10 +430,10 @@ public class Board extends JPanel implements Runnable {
         }
     }
 
-    //enlarge playerfish
-    //update hinh anh playerfish cac level o day
-    public void enlargePlayer(int playerlevel){
-        switch (playerlevel){
+    // enlarge playerfish
+    // update hinh anh playerfish cac level o day
+    public void enlargePlayer(int playerlevel) {
+        switch (playerlevel) {
             case 1:
                 player.setIcon("fisheater/resources/fish/player1");
                 break;
@@ -411,29 +461,32 @@ public class Board extends JPanel implements Runnable {
             Fish f = (Fish) fish.get(i);
 
             if (player.EllipseCollision(f)) {
-                //chi co the an fish co level nho hon
-            if (player.getLevel() > f.getLevel() ) {
-                eatSound.play();
-                f.setVisible(false);
-                prevPlayerlevel = convertScore2level(score);
-                score += f.getPoints();
-                newPlayerlevel = convertScore2level(score);
+                // chi co the an fish co level nho hon
+                if (player.getLevel() > f.getLevel()) {
+                    eatSound.play();
+                    f.setVisible(false);
+                    prevPlayerlevel = convertScore2level(score);
+                    score += f.getPoints();
+                    newPlayerlevel = convertScore2level(score);
 
-                //update level va tang kich thuoc neu level up
-                if (prevPlayerlevel < convertScore2level(score)){
+                    // update level va tang kich thuoc neu level up
+                    if (prevPlayerlevel < convertScore2level(score)) {
 
-                    enlargePlayer(newPlayerlevel);
-                    player.setlevel(newPlayerlevel);
+                        enlargePlayer(newPlayerlevel);
+                        player.setlevel(newPlayerlevel);
 
+                    }
+
+                    player.setSpeed(player.getLevel() + 1);
+                } else {
+                    player.setVisible(false);
+                    inGame = false;
+                    if (highScore.checkHighScore(score)) {
+                        inEnterName = true;
+                    } else
+                        GameOver = true;
+                    gameOverSound.play();
                 }
-
-                player.setSpeed(player.getLevel() + 1);
-            } else {
-                player.setVisible(false);
-                inGame = false;
-                GameOver = true;
-                gameOverSound.play();
-            }
             }
         }
 
@@ -451,7 +504,13 @@ public class Board extends JPanel implements Runnable {
                 } else {
                     player.setVisible(false);
                     inGame = false;
-                    GameOver = true;
+                    if (highScore.checkHighScore(score)) {
+                        inEnterName = true;
+                        menu.setCurrentMenu("enterName");
+                    } else {
+                        GameOver = true;
+                        menu.setCurrentMenu("gameOver");
+                    }
                     gameOverSound.play();
                 }
             }
@@ -476,11 +535,23 @@ public class Board extends JPanel implements Runnable {
 
     private class keyAdapter extends KeyAdapter {
         public void keyReleased(KeyEvent e) {
-            player.keyReleased(e);
+            if (inGame)
+                player.keyReleased(e);
+            if (inEnterName) {
+                int keyCode = e.getKeyCode();
+                char keyChar = e.getKeyChar();
+                if (65 <= keyCode && keyCode <= 90 && playerName.length() < maxPlayerNameLength)// a->z A->Z
+                    playerName += keyChar;
+                if (keyCode == 32 && playerName.length() < maxPlayerNameLength) // space
+                    playerName += keyChar;
+                if (keyCode == 8 && playerName.length() >= 1) // backspace
+                    playerName = playerName.substring(0, playerName.length() - 1);
+            }
         }
 
         public void keyPressed(KeyEvent e) {
-            player.keyPressed(e);
+            if (inGame)
+                player.keyPressed(e);
         }
     }
 
@@ -495,21 +566,69 @@ public class Board extends JPanel implements Runnable {
                 if (inMenu) {
                     if (menu.startPressed(m)) {
                         inGame = true;
+                        menu.setCurrentMenu("inGame");
                         inMenu = false;
                         initGame();
+                    }
+                    if (menu.tutorialPressed(m)) {
+                        inTutorial = true;
+                        menu.setCurrentMenu("tutorial");
+                        inMenu = false;
+                    }
+                    if (menu.highScorePressed(m)) {
+                        inHighScore = true;
+                        menu.setCurrentMenu("highScore");
+                        inMenu = false;
                     }
                 }
 
                 if (GameOver) {
                     if (menu.replayPressed(m)) {
                         inGame = true;
+                        menu.setCurrentMenu("inGame");
                         GameOver = false;
                         initGame();
                     }
                     if (menu.menuPressed(m)) {
                         inMenu = true;
+                        menu.setCurrentMenu("welcome");
                         GameOver = false;
                         player.setVisible(true);
+                    }
+                }
+                if (inEnterName) {
+                    if (menu.submitNamePressed(m)) {
+                        inHighScore = true;
+                        highScore.addHighScore(playerName, score);
+                        System.out.print(playerName);
+                        menu.setCurrentMenu("highScore");
+                        inEnterName = false;
+                    }
+                }
+                if (inHighScore) {
+                    if (menu.menuPressed(m)) {
+                        inMenu = true;
+                        menu.setCurrentMenu("welcome");
+                        inHighScore = false;
+                    }
+                    if (menu.replayPressed(m)) {
+                        inGame = true;
+                        menu.setCurrentMenu("inGame");
+                        inHighScore = false;
+                        initGame();
+                    }
+                }
+                if (inTutorial) {
+                    if (menu.menuPressed(m)) {
+                        inMenu = true;
+                        menu.setCurrentMenu("welcome");
+                        inTutorial = false;
+                    }
+                    if (menu.startPressed(m)) {
+                        inGame = true;
+                        menu.setCurrentMenu("inGame");
+                        inTutorial = false;
+                        initGame();
                     }
                 }
             }

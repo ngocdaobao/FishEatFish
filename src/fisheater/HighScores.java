@@ -39,6 +39,18 @@ public class HighScores {
 			e.printStackTrace();
         }
 	}
+	public String getName(int i) {
+		if (player[i]!=null)
+			return player[i].name;
+		else
+			return "";
+	}
+	public String getScore(int i) {
+		if (player[i]!=null)
+			return String.valueOf(player[i].score);
+		else
+			return "";
+	}
 	public boolean checkHighScore(int score) {
 		if (player[2]==null || score>player[2].score)
 			return true;
@@ -73,11 +85,4 @@ public class HighScores {
 			e.printStackTrace();
 		}
 	}
-	public static void main(String[] args) {
-		HighScores h = new HighScores();
-		h.addHighScore("sd", 16);
-		for (int i=0; i<h.playerCount; i++)
-			System.out.print(h.player[i].score + "\n");
-		System.out.print(h.checkHighScore(0));
-    }
 }
