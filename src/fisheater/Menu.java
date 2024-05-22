@@ -10,74 +10,38 @@ import java.awt.event.MouseEvent;
  */
 public class Menu extends JPanel {
 
-    WelcomeMenu welcome;
-    TutorialMenu tutorial;
-    GameOverMenu gameOver;
-    HighScoreMenu highScore;
-    EnterNameMenu enterName;
+    Welcome welcome;
+    Tutorial tutorial;
+    GameOver gameOver;
 
-    boolean isWelcome, isGameOver, isTutorial, isHighScore, isEnterName;
+    boolean isStart, isReplay, isTutorial, isQuit;
 
     public Menu(int width, int height) {
-        welcome = new WelcomeMenu(width, height);
-        tutorial = new TutorialMenu(width, height);
-        gameOver = new GameOverMenu(width, height);
-        highScore = new HighScoreMenu(width, height);
-        enterName = new EnterNameMenu(width, height);
+        welcome = new Welcome(width, height);
+        tutorial = new Tutorial(width, height);
+        gameOver = new GameOver(width, height);
 
-        isWelcome = true;
-        isGameOver = false;
-        isTutorial = false;
-        isHighScore = false;
-        isEnterName = false;
     }
 
-    public void setCurrentMenu(String str) {
-        isWelcome = false;
-        isGameOver = false;
-        isTutorial = false;
-        isHighScore = false;
-        isEnterName = false;
-        if (str == "welcome")
-            isWelcome = true;
-        if (str == "gameOver")
-            isGameOver = true;
-        if (str == "tutorial")
-            isTutorial = true;
-        if (str == "highScore")
-            isHighScore = true;
-        if (str == "enterName")
-            isEnterName = true;
-    }
-
-    public Image getMenuBackgroundImage(String str) {
+    public Image getMenu(String str) {
         if (str == "welcome")
             return welcome.getBackgroundImage();
         if (str == "tutorial")
             return tutorial.getBackgroundImage();
-        if (str == "highScore")
-            return highScore.getBackgroundImage();
-        if (str == "gameOver")
-            return gameOver.getBackgroundImage();
-        if (str == "enterName")
-            return enterName.getBackgroundImage();
-        return tutorial.getBackgroundImage();
+        return gameOver.getBackgroundImage();
     }
 
     public boolean startPressed(MouseEvent e) {
-        if (isWelcome)
-            return welcome.startPressed(e);
-        if (isTutorial)
-            return tutorial.playPressed(e);
-        return false;
+        System.out.println(welcome.startPressed(e));
+        return welcome.startPressed(e);
     }
 
     public boolean tutorialPressed(MouseEvent e) {
         return welcome.tutorialPressed(e);
     }
 
-    public boolean highScorePressed(MouseEvent e) {
-        return welcome.highScorePressed(e);
+    public boolean quitPressed(MouseEvent e) {
+        return welcome.quitPressed(e);
     }
 
     public boolean replayPressed(MouseEvent e) {
@@ -85,17 +49,7 @@ public class Menu extends JPanel {
     }
 
     public boolean menuPressed(MouseEvent e) {
-        if (isGameOver)
-            return gameOver.menuPressed(e);
-        if (isTutorial)
-            return tutorial.homePressed(e);
-        if (isHighScore)
-            return highScore.menuPressed(e);
-        return false;
-    }
-
-    public boolean submitNamePressed(MouseEvent e) {
-        return enterName.submitNamePressed(e);
+        return gameOver.replayPressed(e);
     }
 
     public static void main(String[] args) {

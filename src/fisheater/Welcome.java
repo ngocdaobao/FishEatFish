@@ -8,15 +8,15 @@ import java.awt.event.MouseEvent;
 /**
  * Welcome
  */
-public class WelcomeMenu extends JPanel {
+public class Welcome extends JPanel {
 
     private String backgroundImageUrl = "fisheater/resources/menus/Welcome.png";
 
-    int[] startBtn = { 238, 456, 359, 821 }; // top left down right
-    int[] tutorialBtn = { 374, 456, 494, 821 };
-    int[] highScoreBtn = { 506, 456, 625, 821 };
+    int[] startBtn = { 262, 458, 335, 827 }; // top left down right
+    int[] tutorialBtn = { 369, 458, 443, 827 };
+    int[] quitBtn = { 477, 458, 551, 827 };
 
-    public WelcomeMenu(int Width, int Height) {
+    public Welcome(int Width, int Height) {
         setSize(Width, Height);
         setLocation(0, 0);
     }
@@ -46,12 +46,12 @@ public class WelcomeMenu extends JPanel {
         return true;
     }
 
-    public boolean highScorePressed(MouseEvent e) {
+    public boolean quitPressed(MouseEvent e) {
         double x = e.getX();
         double y = e.getY();
-        if (x < highScoreBtn[1] || x > highScoreBtn[3])
+        if (x < quitBtn[1] || x > quitBtn[3])
             return false;
-        if (y < highScoreBtn[0] || y > highScoreBtn[2])
+        if (y < quitBtn[0] || y > quitBtn[2])
             return false;
         return true;
     }
