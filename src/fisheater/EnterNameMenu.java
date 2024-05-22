@@ -1,17 +1,16 @@
 package fisheater;
 
 import javax.swing.*;
-
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
-public class Tutorial extends JPanel {
+public class EnterNameMenu extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/Tutorial.jpg";
+    private String backgroundImageUrl = "fisheater/resources/menus/EnterName.png";
 
-    int[] backBtn = { 471, 456, 545, 824 };
+    int[] submitNameBtn = { 600, 532, 673, 750 };
 
-    public Tutorial(int width, int height) {
+    public EnterNameMenu(int width, int height) {
         setSize(width, height);
         setLocation(0, 0);
     }
@@ -21,17 +20,13 @@ public class Tutorial extends JPanel {
         return ii.getImage();
     }
 
-    public boolean backPressed(MouseEvent e) {
+    public boolean submitNamePressed(MouseEvent e) {
         double x = e.getX();
         double y = e.getY();
-        if (x < backBtn[1] || x > backBtn[3])
+        if (x < submitNameBtn[1] || x > submitNameBtn[3])
             return false;
-        if (y < backBtn[0] || y > backBtn[2])
+        if (y < submitNameBtn[0] || y > submitNameBtn[2])
             return false;
         return true;
-    }
-
-    public static void main(String[] args) {
-
     }
 }
