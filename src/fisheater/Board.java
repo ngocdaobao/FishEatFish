@@ -262,7 +262,7 @@ public class Board extends JPanel implements Runnable {
             horizontalPosition = 860 - (textWidth / 2);
             verticalPosition = 420;
             g2d.drawString(highScore.getName(2), horizontalPosition, verticalPosition);
-            
+
             textWidth = g2d.getFontMetrics().stringWidth(highScore.getScore(0));
             horizontalPosition = 655 - (textWidth / 2);
             verticalPosition = 350;
@@ -483,8 +483,11 @@ public class Board extends JPanel implements Runnable {
                     inGame = false;
                     if (highScore.checkHighScore(score)) {
                         inEnterName = true;
-                    } else
+                        menu.setCurrentMenu("enterName");
+                    } else {
                         GameOver = true;
+                        menu.setCurrentMenu("gameOver");
+                    }
                     gameOverSound.play();
                 }
             }
@@ -583,6 +586,7 @@ public class Board extends JPanel implements Runnable {
                 }
 
                 if (GameOver) {
+
                     if (menu.replayPressed(m)) {
                         inGame = true;
                         menu.setCurrentMenu("inGame");
@@ -600,7 +604,6 @@ public class Board extends JPanel implements Runnable {
                     if (menu.submitNamePressed(m)) {
                         inHighScore = true;
                         highScore.addHighScore(playerName, score);
-                        System.out.print(playerName);
                         menu.setCurrentMenu("highScore");
                         inEnterName = false;
                     }

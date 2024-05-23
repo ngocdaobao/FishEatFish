@@ -48,6 +48,7 @@ public class Menu extends JPanel {
             isHighScore = true;
         if (str == "enterName")
             isEnterName = true;
+        System.out.println(str);
     }
 
     public Image getMenuBackgroundImage(String str) {
