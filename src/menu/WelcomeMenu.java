@@ -1,4 +1,4 @@
-package fisheater;
+package menu;
 
 import javax.swing.*;
 
@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
  */
 public class WelcomeMenu extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/Welcome.png";
+    private String backgroundImageUrl = "resources/menus/Welcome.png";
 
     int[] startBtn = { 238, 456, 359, 821 }; // top left down right
     int[] tutorialBtn = { 374, 456, 494, 821 };

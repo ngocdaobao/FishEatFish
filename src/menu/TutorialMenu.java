@@ -1,4 +1,4 @@
-package fisheater;
+package menu;
 
 import javax.swing.*;
 
@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 public class TutorialMenu extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/Tutorial.jpg";
+    private String backgroundImageUrl = "resources/menus/Tutorial.jpg";
 
     int[] homeBtn = { 613, 16, 696, 253 };
     int[] playBtn = { 613, 1072, 696, 1260 };

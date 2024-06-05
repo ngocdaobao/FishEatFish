@@ -1,4 +1,4 @@
-package fisheater;
+package game;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +19,7 @@ public class HighScores {
 	private int playerCount = 0;
 	private HighPlayer[] player = new HighPlayer[3];
 	HighScores() {
-		file = new File("src/fisheater/resources/score.txt");
+		file = new File("src/resources/score.txt");
 		try {
 			if (!file.createNewFile()) {
 				Scanner scan = new Scanner(file);

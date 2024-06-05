@@ -1,7 +1,9 @@
-package fisheater;
+package game;
 
-import music.Music;
-import music.MusicThread;
+import music.*;
+import menu.*;
+import menu.Menu;
+import entity.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-public class Board extends JPanel implements Runnable {
+public class Panel extends JPanel implements Runnable {
     public Graphics2D g2d;
     private int B_WIDTH;
     private int B_HEIGHT;
@@ -28,7 +30,7 @@ public class Board extends JPanel implements Runnable {
     private Player player;
     private Background bg;
 
-    private PowerUp pUp;
+    private SpeedUp pUp;
     private EatShark SharkEat;
     private Menu menu;
     private HighScores highScore;
@@ -43,10 +45,10 @@ public class Board extends JPanel implements Runnable {
     private boolean inGame, inMenu, inTutorial, inHighScore, inEnterName, GameOver, quitGame, printDuration,
             sharkDuration;
     private Font font;
-    private Music gameMusic = new Music("fisheater/resources/sounds/gameMusic.wav", 0.3);
-    private MusicThread eatSound = new MusicThread("fisheater/resources/sounds/eat.wav", 0.3);
-    private MusicThread gameOverSound = new MusicThread("fisheater/resources/sounds/gameOver.wav", 0.3);
-    private MusicThread powerUpSound = new MusicThread("fisheater/resources/sounds/powerUp.wav", 0.3);
+    private Music gameMusic = new Music("resources/sounds/gameMusic.wav", 0.3);
+    private MusicThread eatSound = new MusicThread("resources/sounds/eat.wav", 0.3);
+    private MusicThread gameOverSound = new MusicThread("resources/sounds/gameOver.wav", 0.3);
+    private MusicThread powerUpSound = new MusicThread("resources/sounds/powerUp.wav", 0.3);
 
     /*
      * public void pauseGame(int durationMillis) {
@@ -61,7 +63,7 @@ public class Board extends JPanel implements Runnable {
      * }
      */
 
-    public Board(int width, int height) {
+    public Panel(int width, int height) {
         addMouseListener(new mouseAdapter());
         addKeyListener(new keyAdapter());
         setFocusable(true);
@@ -86,7 +88,7 @@ public class Board extends JPanel implements Runnable {
     public void initGame() {
         menu = new Menu(B_WIDTH, B_HEIGHT);
         bg = new Background(0, 0);
-        pUp = new PowerUp(0, 0, 0);
+        pUp = new SpeedUp(0, 0, 0);
         SharkEat = new EatShark(0, 0, 0);
         fish = new ArrayList();
         sharks = new ArrayList();
@@ -160,13 +162,13 @@ public class Board extends JPanel implements Runnable {
         }
     }
 
-    public void genPowerUp() {
+    public void genSpeedUp() {
         Random gen = new Random();
         int x = (pUp.getWidth() + gen.nextInt(B_WIDTH - pUp.getWidth() * 3)),
                 y = -gen.nextInt(B_HEIGHT) - 500,
                 speed = gen.nextInt(5) + 3;
 
-        pUp = new PowerUp(x, y, speed);
+        pUp = new SpeedUp(x, y, speed);
     }
 
     public void genEatShark() {
@@ -365,7 +367,7 @@ public class Board extends JPanel implements Runnable {
                     genSharks();
                 }
                 if (pUp.isAlive() == false && gen.nextInt(200) > 15) {
-                    genPowerUp();
+                    genSpeedUp();
                 }
                 if (pUp.getDuration() < 0) {
                     player.setSpeedUp(false);
@@ -435,22 +437,22 @@ public class Board extends JPanel implements Runnable {
     public void enlargePlayer(int playerlevel) {
         switch (playerlevel) {
             case 1:
-                player.setIcon("fisheater/resources/fish/player1");
+                player.setIcon("resources/fish/player1");
                 break;
             case 2:
-                player.setIcon("fisheater/resources/fish/player2");
+                player.setIcon("resources/fish/player2");
                 break;
             case 3:
-                player.setIcon("fisheater/resources/fish/player3");
+                player.setIcon("resources/fish/player3");
                 break;
             case 4:
-                player.setIcon("fisheater/resources/fish/player4");
+                player.setIcon("resources/fish/player4");
                 break;
             case 5:
-                player.setIcon("fisheater/resources/fish/player5");
+                player.setIcon("resources/fish/player5");
                 break;
             case 6:
-                player.setIcon("fisheater/resources/fish/player6");
+                player.setIcon("resources/fish/player6");
                 break;
         }
     }

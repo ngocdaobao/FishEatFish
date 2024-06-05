@@ -1,4 +1,4 @@
-package fisheater;
+package menu;
 
 import javax.swing.*;
 import java.awt.Image;
@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 
 public class EnterNameMenu extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/EnterName.png";
+    private String backgroundImageUrl = "resources/menus/EnterName.png";
 
     int[] submitNameBtn = { 600, 532, 673, 750 };
 

@@ -1,20 +1,22 @@
-package fisheater;
+package menu;
 
 import javax.swing.*;
 
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
-public class GameOverMenu extends JPanel {
+/**
+ * Welcome
+ */
+public class HighScoreMenu extends JPanel {
 
-    private String backgroundImageUrl = "fisheater/resources/menus/GameOver.png";
+    private String backgroundImageUrl = "resources/menus/TopScore.png";
 
-    int[] replayBtn = { 620, 31, 692, 245 };
-    int[] menuBtn = { 620, 1026, 692, 1242 };
-    JLabel scoreLabel;
+    int[] replayBtn = { 620, 30, 690, 250 }; // top left down right
+    int[] menuBtn = { 620, 1030, 690, 1240 };
 
-    public GameOverMenu(int width, int height) {
-        setSize(width, height);
+    public HighScoreMenu(int Width, int Height) {
+        setSize(Width, Height);
         setLocation(0, 0);
     }
 
@@ -42,5 +44,4 @@ public class GameOverMenu extends JPanel {
             return false;
         return true;
     }
-
 }

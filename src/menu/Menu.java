@@ -1,4 +1,4 @@
-package fisheater;
+package menu;
 
 import javax.swing.JPanel;
 
