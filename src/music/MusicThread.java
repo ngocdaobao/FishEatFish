@@ -7,8 +7,7 @@ import javax.sound.sampled.Clip;
 public class MusicThread {
 	private String file;
 	private double volume;
-	public ArrayList<Music> arr = new ArrayList<Music>();
-	private int i=0;
+	private ArrayList<Music> arr = new ArrayList<Music>();
 	public MusicThread(String path, double v) {
 		file = path;
 		volume = v;
