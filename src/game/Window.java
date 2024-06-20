@@ -13,7 +13,7 @@ public class Window extends JFrame {
 
         setIconImage(icon.getImage());
 
-        setTitle("Fish Eater");
+        setTitle("Fish Eat Fish");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
